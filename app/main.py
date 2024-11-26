@@ -10,6 +10,9 @@ from app.data import Database
 from app.graph import chart
 from app.machine import Machine
 
+MONGO_URI = os.getenv("DB_URL")
+DATABASE_NAME = "example_db"
+COLLECTION_NAME = "test_collection"
 SPRINT = 1
 APP = Flask(__name__)
 
@@ -28,7 +31,8 @@ def home():
 def data():
     if SPRINT < 1:
         return render_template("data.html")
-    db = Database()
+
+    db = Database(MONGO_URI, DATABASE_NAME, COLLECTION_NAME)
     return render_template(
         "data.html",
         count=db.count(),

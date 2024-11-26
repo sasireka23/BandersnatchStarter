@@ -8,6 +8,7 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 load_dotenv()
 
+
 class Database:
 
     def __init__(self, uri: str, database_name: str, collection_name: str):
@@ -86,6 +87,7 @@ class Database:
         return 'None'
 
 
+"""
 if __name__ == "__main__":
     MONGO_URI = os.getenv("DB_URL")
     DATABASE_NAME = "example_db"
@@ -108,6 +110,8 @@ if __name__ == "__main__":
     # Get the HTML Representation of dataframe
     result = db.html_table()
     print(result)
+"""
+
 
 
 
