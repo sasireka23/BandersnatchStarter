@@ -33,15 +33,15 @@ class Database:
         for _ in range(amount):
             monster = Monster()
             monster_record = {
-                "name": monster.name,
-                "type": monster.type,
-                "level": monster.level,
-                "rarity": monster.rarity,
-                "damage": monster.damage,
-                "health": monster.health,
-                "energy": monster.energy,
-                "sanity": monster.sanity,
-                "timestamp": monster.timestamp
+                "Name": monster.name,
+                "Type": monster.type,
+                "Level": monster.level,
+                "Rarity": monster.rarity,
+                "Damage": monster.damage,
+                "Health": monster.health,
+                "Energy": monster.energy,
+                "Sanity": monster.sanity,
+                "Timestamp": monster.timestamp
             }
             monster_records.append(monster_record)
         # Insert records into MongoDB
@@ -72,6 +72,7 @@ class Database:
         """
         cursor = self.collection.find()
         df = pd.DataFrame(list(cursor))
+        df = df.drop(columns=["_id"])
         return df
 
     def html_table(self) -> str:
@@ -82,10 +83,10 @@ class Database:
         if self.collection.count_documents({}) > 0:
             cursor = self.collection.find()
             df = pd.DataFrame(list(cursor))
+            df = df.drop(columns=["_id"])
             html_table = df.to_html()
             return html_table
         return 'None'
-
 
 """
 if __name__ == "__main__":
@@ -111,6 +112,8 @@ if __name__ == "__main__":
     result = db.html_table()
     print(result)
 """
+
+
 
 
 
