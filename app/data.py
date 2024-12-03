@@ -88,6 +88,7 @@ class Database:
             return html_table
         return 'None'
 
+
 """
 if __name__ == "__main__":
     MONGO_URI = os.getenv("DB_URL")

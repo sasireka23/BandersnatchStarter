@@ -13,7 +13,7 @@ from app.machine import Machine
 MONGO_URI = os.getenv("DB_URL")
 DATABASE_NAME = "example_db"
 COLLECTION_NAME = "test_collection"
-SPRINT = 1
+SPRINT = 2
 APP = Flask(__name__)
 
 
