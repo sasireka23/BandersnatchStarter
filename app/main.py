@@ -1,7 +1,11 @@
+import datetime
 from base64 import b64decode
 import os
 
 import random
+
+import numpy as np
+import pandas as pd
 from MonsterLab import Monster
 from flask import Flask, render_template, request
 from pandas import DataFrame
@@ -13,7 +17,7 @@ from app.machine import Machine
 MONGO_URI = os.getenv("DB_URL")
 DATABASE_NAME = "example_db"
 COLLECTION_NAME = "test_collection"
-SPRINT = 2
+SPRINT = 3
 APP = Flask(__name__)
 
 
@@ -77,6 +81,7 @@ def model():
         df = db.dataframe()
         machine = Machine(df[options])
         machine.save(filepath)
+        machine = Machine.open(filepath)
     else:
         machine = Machine.open(filepath)
     stats = [round(random.uniform(1, 250), 2) for _ in range(3)]
@@ -84,10 +89,17 @@ def model():
     health = request.values.get("health", type=float) or stats.pop()
     energy = request.values.get("energy", type=float) or stats.pop()
     sanity = request.values.get("sanity", type=float) or stats.pop()
-    prediction, confidence = machine(DataFrame(
-        [dict(zip(options, (level, health, energy, sanity)))]
-    ))
-    info = machine.info()
+    data_frame = DataFrame([dict(zip(options, (level, health, energy, sanity)))])
+    prediction = machine.predict(data_frame)
+    confidence = np.max(machine.predict_proba(data_frame))
+    model_name = type(machine).__name__
+    timestamp = os.path.getmtime(filepath)
+    time = datetime.datetime.fromtimestamp(timestamp).replace(microsecond=0)
+    info = f"""
+            Base Model:{model_name} 
+            Timestamp:{time}
+            """
+
     return render_template(
         "model.html",
         info=info,
